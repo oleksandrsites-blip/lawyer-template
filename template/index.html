@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="uk" data-style="{{style}}">
+<html lang="uk" data-style="{{style}}" data-font="{{font}}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,80 +13,94 @@
   <meta property="og:description" content="{{description}}">
   <meta property="og:url" content="{{url}}">
   <meta property="og:image" content="{{og_image}}">
-  <meta name="theme-color" content="#F4F4F0">
+  <meta name="theme-color" content="#F2F2F3">
   <script>document.documentElement.classList.add('js')</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;600&family=Spectral:ital,wght@1,400;1,500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Onest:wght@400;500;600&display=swap">
+  <link rel="preload" as="image" href="{{photo}}-1100.webp" imagesrcset="{{photo}}-700.webp 700w, {{photo}}-1100.webp 1100w" imagesizes="(min-width: 1024px) 470px, 92vw">
   <link rel="stylesheet" href="/css/style.css?v={{version}}">
   <script type="application/ld+json">{{schema}}</script>
 </head>
 <body>
   <a class="skip" href="#main">Перейти до змісту</a>
-
   <p class="concept"{{concept_hidden}}>{{concept_note}}</p>
 
-  <header class="bar">
-    <div class="wrap bar__inner">
-      <a class="brand" href="#top">
-        <span class="brand__name">{{name}}</span>
-        <span class="brand__role">{{title_lower}}, {{city}}</span>
-      </a>
+  <div class="wrap">
+    <header class="top">
+      <a class="logo" href="#top"><span class="logo__mark">{{initials}}</span><span>{{name}}</span></a>
       <nav class="nav" aria-label="Розділи">
+        <a href="#situations">Ситуації</a>
         <a href="#process">Як працюю</a>
         <a href="#about">Про мене</a>
         <a href="#price">Вартість</a>
         <a href="#contact">Контакти</a>
       </nav>
-      <div class="bar__actions">
-        <a class="bar__phone" href="tel:{{tel}}">{{phone}}</a>
-        <a class="btn btn--sm" href="#contact">Записатись</a>
+      <div class="top__actions">
+        <a class="top__phone" href="tel:{{tel}}">{{phone}}</a>
+        <a class="btn btn--dark btn--sm" href="#contact">Записатись</a>
       </div>
-    </div>
-  </header>
+    </header>
+  </div>
 
   <main id="main">
-    <section class="ask" id="top" aria-labelledby="ask-title">
-      <div class="wrap ask__grid">
-
-        <div class="ask__main">
-          <div class="me">
-            <img class="me__photo" src="{{photo}}-720.webp" width="720" height="1080" alt="{{photo_alt}}" fetchpriority="high">
-            <h1 class="me__text" id="ask-title"><b>{{name}}</b> — {{title_lower}} {{city_in}}. {{practice_line}}.</h1>
-          </div>
-
-          <p class="ask__q">Що у вас <span class="mark mark--hero">сталося?</span></p>
-          <p class="ask__hint">Оберіть ситуацію, схожу на вашу. Я підкажу, що зробити вже зараз і що взяти на консультацію.</p>
-
-          <ul class="qs" role="list">
-{{situations}}
-            <li class="q q--other">
-              <span class="q__tag">інше</span>
-              <span class="q__text">Немає вашої ситуації? <a href="{{telegram_url}}" target="_blank" rel="noopener">Опишіть її в Telegram</a>, відповім.</span>
-            </li>
-          </ul>
-        </div>
-
-        <aside class="panel" aria-label="Про адвоката">
-          <div class="intro">
-            <figure class="intro__photo">
-              <img src="{{photo}}-1200.webp" srcset="{{photo}}-720.webp 720w, {{photo}}-1200.webp 1200w" sizes="(min-width: 1024px) 34vw, 100vw" width="1200" height="1800" alt="{{photo_alt}}">
-            </figure>
-            <div class="intro__body">
-              <p class="intro__line">«{{hero_line}}»</p>
-              <dl class="facts">
-                <div><dt>В адвокатурі з</dt><dd>{{since}}</dd></div>
-                <div><dt>Свідоцтво</dt><dd>{{certificate}}</dd></div>
-                <div><dt>Консультація</dt><dd>{{consult_price}}</dd></div>
-                <div><dt>Офіс</dt><dd>{{address}}</dd></div>
-              </dl>
+    <!-- 1. Перший екран -->
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="wrap">
+        <div class="hero__card">
+          <div class="hero__content">
+            <p class="chip"><i aria-hidden="true"></i>{{title}} · {{city}}<span class="hide-sm">{{online_chip}}</span></p>
+            <h1 class="hero__title" id="hero-title">
+              <span class="hero__main">{{practice_line}}</span>
+              <span class="hero__soft">{{headline_soft}}</span>
+            </h1>
+            <p class="hero__lead"><b>{{name}}.</b> {{hero_line}}</p>
+            <div class="hero__cta">
+              <a class="btn btn--dark" href="#contact">Записатись на консультацію <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></a>
+              <a class="btn btn--ghost" href="{{telegram_url}}" target="_blank" rel="noopener">Написати в Telegram</a>
             </div>
+            <dl class="stats">
+              <div class="stat"><dt>в адвокатурі з</dt><dd>{{since}}</dd></div>
+              <div class="stat"><dt>консультація</dt><dd>{{price}}</dd></div>
+              <div class="stat stat--lg"><dt>перша зустріч</dt><dd>{{duration}}</dd></div>
+            </dl>
           </div>
-        </aside>
 
+          <div class="hero__person">
+            <img src="{{photo}}-1100.webp" srcset="{{photo}}-700.webp 700w, {{photo}}-1100.webp 1100w" sizes="(min-width: 1024px) 470px, 92vw" width="1100" height="1728" alt="{{photo_alt}}" fetchpriority="high">
+          </div>
+
+          <a class="glass" href="#contact">
+            <span class="glass__text">
+              <small>Перша консультація</small>
+              <strong>Розберемо вашу ситуацію</strong>
+              <span class="glass__p">В офісі {{office_short}}{{online_text}}. Візьміть документи, які вже маєте.</span>
+            </span>
+            <span class="glass__btn" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></span>
+          </a>
+        </div>
+      </div>
+
+      <nav class="ticker" aria-label="З чим звертаються">
+{{ticker}}
+      </nav>
+    </section>
+
+    <!-- 2. Ситуації -->
+    <section class="section" id="situations" aria-labelledby="sit-title">
+      <div class="wrap">
+        <div class="section__head">
+          <h2 class="h2" id="sit-title"><span class="h2__main">З чим до мене звертаються</span> <span class="h2__soft">і що зробити ще до консультації</span></h2>
+          <p class="section__lead">Оберіть ситуацію, схожу на вашу. Відкриється коротка пам'ятка: перші кроки й документи, які варто взяти з собою.</p>
+        </div>
+        <ul class="sits" role="list">
+{{cards}}
+        </ul>
       </div>
     </section>
   </main>
+
+{{memos}}
 
   <nav class="dock" aria-label="Швидкий зв'язок">
     <a class="dock__btn" href="tel:{{tel}}">
@@ -98,6 +112,13 @@
       Telegram
     </a>
   </nav>
+
+  <div class="fontswitch"{{switcher_hidden}} role="group" aria-label="Шрифт заголовків (лише в демо)">
+    <span>Шрифт:</span>
+    <button type="button" data-font="lora">Lora</button>
+    <button type="button" data-font="onest">Onest</button>
+    <button type="button" data-font="mix">Мікс</button>
+  </div>
 
   <script src="/js/main.js?v={{version}}" defer></script>
 </body>

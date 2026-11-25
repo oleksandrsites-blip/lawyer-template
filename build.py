@@ -5,6 +5,7 @@
     python3 build.py ivanenko    -> public/ivanenko/index.html
 
 Дані ліда: leads/<slug>.json · практики: practices/<id>.json · розмітка: template/index.html
+Фото ліда: python3 tools/photo.py <slug> <шлях-до-фото>  (вирізає фон, робить ч/б)
 Лише стандартна бібліотека Python, нічого ставити не треба.
 """
 import html
@@ -16,11 +17,25 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent
 BASE_URL = "https://advokat-site.pages.dev"  # TODO: замінити на справжній домен проєкту
-TEMPLATE_VERSION = str(int(time.time()))  # скидає кеш CSS/JS після кожної збірки
+VERSION = str(int(time.time()))  # скидає кеш CSS/JS після кожної збірки
+
+# Іконки ситуацій (stroke, 24×24). Ключ — поле "icon" у practices/*.json
+ICONS = {
+    "doc": '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+    "clock": '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+    "money": '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/>',
+    "family": '<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20c0-3 2.5-5 5-5s5 2 5 5M11 20c0-3 2.5-5 5-5s5 2 5 5"/>',
+    "alimony": '<path d="M12 3v18M7 7h7a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h8"/>',
+    "house": '<path d="M3 11 12 4l9 7v9H3z"/><path d="M12 20v-6"/>',
+}
 
 
 def e(value):
     return html.escape(str(value), quote=True)
+
+
+def icon(name):
+    return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">{ICONS.get(name, ICONS["doc"])}</svg>'
 
 
 def join_uk(items):
@@ -44,58 +59,77 @@ def field(cfg, key):
     return value
 
 
-def render_situations(cfg, practices):
-    """Список «Що у вас сталося?»: фраза клієнта → пам'ятка."""
-    name = e(f'{cfg["first_name"]} {cfg["last_name"]}')
+def situations(practices):
+    return [(p, s) for p in practices for s in p["situations"]]
+
+
+def render_ticker(items):
+    one = "".join(
+        f'<a href="#s-{e(s["id"])}" data-memo="memo-{e(s["id"])}">{icon(s["icon"])}{e(s["q"])}</a>'
+        for _, s in items
+    )
+    # другий прохід — для безшовної прокрутки, від скрінрідерів і Tab схований
+    dup = one.replace("<a ", '<a tabindex="-1" ')
+    return f'<div class="ticker__row"><span class="ticker__set">{one}</span><span class="ticker__set" aria-hidden="true">{dup}</span></div>'
+
+
+def render_cards(items):
+    out = []
+    for p, s in items:
+        out.append(f'''<li class="sit" id="s-{e(s["id"])}">
+  <button class="sit__btn" type="button" data-memo="memo-{e(s["id"])}" aria-haspopup="dialog">
+    <span class="sit__top"><span class="sit__icon">{icon(s["icon"])}</span><span class="sit__tag">{e(p["tag"])}</span></span>
+    <span class="sit__title">{e(s["q"])}</span>
+    <span class="sit__short">{e(s["short"])}</span>
+    <span class="sit__more">Перші кроки <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+  </button>
+</li>''')
+    return "\n".join(out)
+
+
+def render_memos(cfg, items):
     photo = e(cfg["photo"])
     out = []
-    for p in practices:
-        for s in p["situations"]:
-            sid = f'memo-{s["id"]}'
-            now = "".join(f"<li>{e(x)}</li>" for x in s["now"])
-            bring = "".join(f"<li>{e(x)}</li>" for x in s["bring"])
-            out.append(f'''<li class="q">
-  <button class="q__btn" type="button" aria-expanded="false" aria-controls="{sid}">
-    <span class="q__tag">{e(p["tag"])}</span>
-    <span class="q__text"><span class="mark">{e(s["q"])}</span></span>
-    <span class="q__arrow" aria-hidden="true"></span>
-  </button>
-  <div class="memo" id="{sid}" role="region" aria-label="Пам'ятка: {e(s["title"])}">
-    <p class="memo__kicker">Пам'ятка · {e(p["label"])}</p>
-    <h2 class="memo__title">{e(s["title"])}</h2>
-    <div class="memo__cols">
-      <div>
-        <h3 class="memo__h">Що зробити зараз</h3>
-        <ol class="memo__steps">{now}</ol>
-      </div>
-      <div>
-        <h3 class="memo__h">Що взяти на консультацію</h3>
-        <ul class="memo__bring">{bring}</ul>
-      </div>
+    for p, s in items:
+        now = "".join(f"<li>{e(x)}</li>" for x in s["now"])
+        bring = "".join(f"<li>{e(x)}</li>" for x in s["bring"])
+        out.append(f'''<dialog class="memo" id="memo-{e(s["id"])}" aria-labelledby="memo-{e(s["id"])}-t">
+  <form method="dialog"><button class="memo__close" aria-label="Закрити">×</button></form>
+  <p class="memo__kicker">Пам'ятка · {e(p["label"])}</p>
+  <h3 class="memo__title" id="memo-{e(s["id"])}-t">{e(s["title"])}</h3>
+  <div class="memo__cols">
+    <div>
+      <h4 class="memo__h">Що зробити зараз</h4>
+      <ol class="memo__steps">{now}</ol>
     </div>
-    <div class="memo__foot">
-      <img class="memo__avatar" src="{photo}-720.webp" width="720" height="1080" alt="" loading="lazy">
-      <p class="memo__note">Це загальні кроки. Що робити саме у вашому випадку, скажу на консультації.</p>
-      <a class="btn memo__cta" href="#contact" data-situation="{e(s["title"])}">Записатись з цією ситуацією</a>
+    <div>
+      <h4 class="memo__h">Що взяти на консультацію</h4>
+      <ul class="memo__bring">{bring}</ul>
     </div>
   </div>
-</li>''')
+  <div class="memo__foot">
+    <span class="memo__avatar"><img src="{photo}-700.webp" width="700" height="1099" alt="" loading="lazy"></span>
+    <p class="memo__note">Це загальні кроки. Що робити саме у вашому випадку, скажу на консультації.</p>
+    <a class="btn btn--dark memo__cta" href="#contact" data-situation="{e(s["title"])}">Записатись з цією ситуацією</a>
+  </div>
+</dialog>''')
     return "\n".join(out)
 
 
 def build(slug):
     cfg = load_json(ROOT / "leads" / f"{slug}.json")
     practices = [load_json(ROOT / "practices" / f"{pid}.json") for pid in cfg["practices"]]
+    items = situations(practices)
 
     name = f'{cfg["first_name"]} {cfg["last_name"]}'
+    initials = cfg["first_name"][0] + cfg["last_name"][0]
     if all(p.get("adj") for p in practices):  # «військові та сімейні справи»
         practice_line = join_uk(p["adj"] for p in practices) + " справи"
     else:
         practice_line = join_uk(p["label"] for p in practices)
-    phone_raw = cfg.get("phone", "")
-    tel = "+" + re.sub(r"\D", "", phone_raw)
+    tel = "+" + re.sub(r"\D", "", cfg.get("phone", ""))
     url = BASE_URL + ("/" if slug == "demo" else f"/{slug}/")
-    description = f'{name} — {cfg["title"].lower()} {cfg["city_in"]}. {practice_line.capitalize()}. Консультація {cfg.get("consult_price", "")}.'
+    description = f'{name} — {cfg["title"].lower()} {cfg["city_in"]}. {practice_line.capitalize()}. Консультація {cfg.get("price", "")}.'
 
     schema = {
         "@context": "https://schema.org",
@@ -103,7 +137,7 @@ def build(slug):
         "name": name,
         "url": url,
         "telephone": tel,
-        "image": BASE_URL + cfg["photo"] + "-1200.webp",
+        "image": BASE_URL + cfg["photo"] + "-1100.webp",
         "address": {
             "@type": "PostalAddress",
             "streetAddress": cfg.get("address", ""),
@@ -115,36 +149,45 @@ def build(slug):
     }
 
     ctx = {
-        "style": e(cfg.get("style", "editorial")),
+        "style": e(cfg.get("style", "light")),
+        "font": e(cfg.get("font", "mix")),
         "robots": "noindex, nofollow" if cfg.get("noindex", True) else "index, follow",
         "page_title": e(f'{name} — {cfg["title"].lower()} {cfg["city_in"]} · {practice_line}'),
         "description": e(description),
         "url": e(url),
-        "og_image": e(BASE_URL + cfg["photo"] + "-1200.webp"),
+        "og_image": e(BASE_URL + cfg["photo"] + "-1100.webp"),
         "schema": json.dumps(schema, ensure_ascii=False),
         "concept_note": e(cfg.get("concept_note", "")),
         "concept_hidden": "" if cfg.get("concept_note") else " hidden",
+        "switcher_hidden": "" if cfg.get("font_switcher") else " hidden",
+        "initials": e(initials),
         "first_name": e(cfg["first_name"]),
-        "last_name": e(cfg["last_name"]),
         "name": e(name),
         "title": e(cfg["title"]),
         "title_lower": e(cfg["title"].lower()),
         "city": e(cfg["city"]),
         "city_in": e(cfg["city_in"]),
+        "online_chip": "· офлайн і онлайн" if cfg.get("online") else "",
+        "online_text": " або онлайн" if cfg.get("online") else "",
         "practice_line": e(practice_line.capitalize()),
+        "headline_soft": e(cfg.get("headline_soft", "від консультації до суду")),
         "hero_line": e(cfg["hero_line"]),
         "phone": field(cfg, "phone"),
         "tel": e(tel),
         "telegram_url": e(f'https://t.me/{cfg["telegram"]}'),
         "address": field(cfg, "address"),
+        "office_short": e(cfg.get("office_short", "")),
         "since": field(cfg, "since"),
         "certificate": field(cfg, "certificate"),
         "council": field(cfg, "council"),
-        "consult_price": field(cfg, "consult_price"),
+        "price": field(cfg, "price"),
+        "duration": field(cfg, "duration"),
         "photo": e(cfg["photo"]),
         "photo_alt": e(cfg["photo_alt"]),
-        "situations": render_situations(cfg, practices),
-        "version": TEMPLATE_VERSION,
+        "ticker": render_ticker(items),
+        "cards": render_cards(items),
+        "memos": render_memos(cfg, items),
+        "version": VERSION,
     }
 
     tpl = (ROOT / "template" / "index.html").read_text(encoding="utf-8")
