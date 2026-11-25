@@ -258,7 +258,8 @@ def render_faq(cfg):
 def build(slug):
     cfg = load_json(ROOT / "leads" / f"{slug}.json")
     practices = [load_json(ROOT / "practices" / f"{pid}.json") for pid in cfg["practices"]]
-    items = situations(practices)
+    skip = set(cfg.get("skip_situations", []))
+    items = [(p, s) for p, s in situations(practices) if s["id"] not in skip]
 
     name = f'{cfg["first_name"]} {cfg["last_name"]}'
     initials = cfg["first_name"][0] + cfg["last_name"][0]
