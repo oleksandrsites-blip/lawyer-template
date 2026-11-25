@@ -1,35 +1,66 @@
 {
   "slug": "demo",
   "style": "light",
-  "font": "mix",
-  "font_switcher": true,
+  "font": "onest",
+  "font_switcher": false,
   "concept_note": "",
   "noindex": true,
-
   "first_name": "Олена",
   "last_name": "Коваль",
   "title": "Адвокатка",
   "city": "Рівне",
   "city_in": "у Рівному",
-  "practices": ["military", "family"],
+  "practices": [
+    "military",
+    "family"
+  ],
   "headline_soft": "від консультації до суду",
   "hero_line": "Спершу розбираюсь у вашій ситуації й чесно кажу, що можна зробити. Далі — план дій і зрозуміла ціна.",
   "online": true,
-
   "phone": "+380 00 000 00 00",
   "telegram": "username",
   "viber": "+380000000000",
   "address": "вул. Соборна, 00, офіс 0",
   "office_short": "на Соборній",
-
   "since": "2016",
   "certificate": "№ 000 від 2016 р.",
   "council": "Рада адвокатів Рівненської області",
   "price": "600 грн",
   "duration": "45 хв",
-
   "photo": "/img/leads/demo/cut",
   "photo_alt": "Олена Коваль, адвокатка",
-
-  "placeholders": ["phone", "address", "since", "certificate", "price", "duration"]
+  "placeholders": [
+    "phone",
+    "address",
+    "since",
+    "certificate",
+    "price",
+    "duration",
+    "education",
+    "prices"
+  ],
+  "education": "НУ «Острозька академія», право",
+  "about": [
+    "Я з Рівного і практикую тут з 2016 року. Більшість моїх справ — сімейні та військові: розлучення, аліменти, повістки, відстрочки, виплати.",
+    "Мені важливо, щоб після консультації людина розуміла свою ситуацію і наступні кроки, навіть якщо вирішить не продовжувати зі мною."
+  ],
+  "about_example": true,
+  "prices": [
+    {
+      "name": "Консультація",
+      "price": "600 грн",
+      "note": "45 хв в офісі або онлайн. Розбираємо ситуацію й документи, кажу, які є варіанти.",
+      "main": true
+    },
+    {
+      "name": "Документи",
+      "price": "від 1 500 грн",
+      "note": "Позов, заява, скарга чи відповідь на позов під вашу ситуацію."
+    },
+    {
+      "name": "Ведення справи",
+      "price": "за договором",
+      "note": "Ціну й етапи фіксуємо в договорі до початку роботи."
+    }
+  ]
 }

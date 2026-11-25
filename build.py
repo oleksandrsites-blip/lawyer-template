@@ -116,6 +116,31 @@ def render_memos(cfg, items):
     return "\n".join(out)
 
 
+def render_prices(cfg):
+    ph = "prices" in cfg.get("placeholders", [])
+    out = []
+    for p in cfg.get("prices", []):
+        price = e(p["price"])
+        if ph:
+            price = f'<span class="ph" title="Умовні дані — замінити">{price}</span>'
+        main = p.get("main")
+        cta = '<a class="btn btn--light" href="#contact">Записатись <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></a>' if main else ""
+        out.append(f'''<li class="price{' price--main' if main else ''}">
+  <p class="price__name">{e(p["name"])}</p>
+  <p class="price__value">{price}</p>
+  <p class="price__note">{e(p["note"])}</p>
+  {cta}
+</li>''')
+    return "\n".join(out)
+
+
+def render_about(cfg):
+    paras = "".join(f"<p>{e(x)}</p>" for x in cfg.get("about", []))
+    if cfg.get("about_example"):
+        paras += '<p class="about__example">Приклад тексту — замінимо вашою історією.</p>'
+    return paras
+
+
 def build(slug):
     cfg = load_json(ROOT / "leads" / f"{slug}.json")
     practices = [load_json(ROOT / "practices" / f"{pid}.json") for pid in cfg["practices"]]
@@ -183,10 +208,14 @@ def build(slug):
         "price": field(cfg, "price"),
         "duration": field(cfg, "duration"),
         "photo": e(cfg["photo"]),
+        "photo_about": e(cfg.get("photo_about") or cfg["photo"]),  # друге фото для «Про мене», якщо є
         "photo_alt": e(cfg["photo_alt"]),
         "ticker": render_ticker(items),
         "cards": render_cards(items),
         "memos": render_memos(cfg, items),
+        "about": render_about(cfg),
+        "education": field(cfg, "education"),
+        "prices": render_prices(cfg),
         "version": VERSION,
     }
 

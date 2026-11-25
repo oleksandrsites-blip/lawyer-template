@@ -98,6 +98,74 @@
         </ul>
       </div>
     </section>
+
+    <!-- 3. Як я працюю -->
+    <section class="section" id="process" aria-labelledby="process-title">
+      <div class="wrap">
+        <div class="process">
+          <div class="process__head">
+            <h2 class="h2" id="process-title"><span class="h2__main">Як я працюю</span> <span class="h2__soft">— щоб ви знали, що буде далі</span></h2>
+            <p class="process__note">Ви весь час розумієте, що відбувається у вашій справі і скільки це коштує.</p>
+          </div>
+          <ol class="steps">
+            <li class="step">
+              <span class="step__chip">Крок 1 · сьогодні</span>
+              <h3 class="step__title">Пишете або телефонуєте</h3>
+              <p class="step__text">Коротко описуєте ситуацію в Telegram чи телефоном. Домовляємось про зручний час консультації.</p>
+            </li>
+            <li class="step">
+              <span class="step__chip">Крок 2 · {{duration}}</span>
+              <h3 class="step__title">Консультація</h3>
+              <p class="step__text">В офісі{{online_text}}. Розбираємо документи, кажу, які є варіанти і ризики. Вартість — {{price}}.</p>
+            </li>
+            <li class="step">
+              <span class="step__chip">Крок 3 · до початку роботи</span>
+              <h3 class="step__title">План і ціна в договорі</h3>
+              <p class="step__text">Письмово фіксуємо, що робимо, в які строки і скільки це коштує. Без доплат «по ходу».</p>
+            </li>
+            <li class="step">
+              <span class="step__chip">Крок 4 · до завершення справи</span>
+              <h3 class="step__title">Веду справу</h3>
+              <p class="step__text">Готую документи, представляю вас у ТЦК, органах і суді. Пишу, на якому етапі справа.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Про мене -->
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="wrap about">
+        <div class="about__photo">
+          <img src="{{photo_about}}-1100.webp" srcset="{{photo_about}}-700.webp 700w, {{photo_about}}-1100.webp 1100w" sizes="(min-width: 1024px) 40vw, 92vw" width="1100" height="1728" alt="{{photo_alt}}" loading="lazy">
+          <p class="about__badge"><span>{{title}}</span><b>з {{since}} року</b></p>
+        </div>
+        <div class="about__body">
+          <h2 class="h2" id="about-title"><span class="h2__main">{{name}}</span> <span class="h2__soft">{{title_lower}} {{city_in}}</span></h2>
+          <div class="about__text">{{about}}</div>
+          <dl class="facts">
+            <div><dt>В адвокатурі з</dt><dd>{{since}} року</dd></div>
+            <div><dt>Свідоцтво</dt><dd>{{certificate}}</dd></div>
+            <div><dt>Рада адвокатів</dt><dd>{{council}}</dd></div>
+            <div><dt>Освіта</dt><dd>{{education}}</dd></div>
+          </dl>
+          <p class="about__secret">Усе, що ви розповідаєте, — адвокатська таємниця. Так вимагає закон.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Вартість -->
+    <section class="section" id="price" aria-labelledby="price-title">
+      <div class="wrap">
+        <div class="section__head">
+          <h2 class="h2" id="price-title"><span class="h2__main">Вартість</span> <span class="h2__soft">наперед, без сюрпризів</span></h2>
+          <p class="section__lead">Почніть з консультації: після неї ви знатимете свої варіанти і точну ціну подальшої роботи.</p>
+        </div>
+        <ul class="prices" role="list">
+{{prices}}
+        </ul>
+      </div>
+    </section>
   </main>
 
 {{memos}}
