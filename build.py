@@ -60,6 +60,90 @@ def field(cfg, key):
     return value
 
 
+FONTS = {
+    "onest": "https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&display=swap",
+    "lora": "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Onest:wght@400;500;600&display=swap",
+    "mix": "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Onest:wght@400;500;600&display=swap",
+}
+
+
+def hero_visual(cfg, initials):
+    """Вирізаний портрет або — якщо фото нема — велика монограма."""
+    if cfg.get("photo"):
+        p = e(cfg["photo"])
+        return f'''          <div class="hero__person">
+            <img src="{p}-1100.webp" srcset="{p}-700.webp 700w, {p}-1100.webp 1100w" sizes="(min-width: 1024px) 470px, 92vw" width="1100" height="1728" alt="{e(cfg.get("photo_alt", ""))}" fetchpriority="high">
+          </div>'''
+    return f'          <div class="hero__mono" aria-hidden="true"><span>{e(initials)}</span></div>'
+
+
+def about_visual(cfg, initials):
+    p = cfg.get("photo_about") or cfg.get("photo")
+    if p:
+        p = e(p)
+        return f'<img src="{p}-1100.webp" srcset="{p}-700.webp 700w, {p}-1100.webp 1100w" sizes="(min-width: 1024px) 40vw, 92vw" width="1100" height="1728" alt="{e(cfg.get("photo_alt", ""))}" loading="lazy">'
+    return f'<span class="about__mono" aria-hidden="true">{e(initials)}</span>'
+
+
+def favicon(initials):
+    svg = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#121214"/>'
+           f'<text x="32" y="42" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="#fff" text-anchor="middle">{initials}</text></svg>')
+    return "data:image/svg+xml," + quote(svg)
+
+
+def make_og(slug, cfg, name, practice_line):
+    """Картинка 1200×630 для прев'ю посилання в Telegram/Viber. Потрібен Pillow; без нього — фото."""
+    rel = "/img/og.jpg" if slug == "demo" else f"/img/leads/{slug}/og.jpg"
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        return (cfg.get("photo") or "") + "-1100.webp"
+    W, H = 1200, 630
+    img = Image.new("RGB", (W, H), (242, 242, 243))
+    grad = Image.linear_gradient("L").rotate(90).resize((W, H))
+    img = Image.composite(Image.new("RGB", (W, H), (215, 217, 223)), img, grad)
+    d = ImageDraw.Draw(img)
+
+    def font(size, bold=False):
+        for path in ("/System/Library/Fonts/Supplemental/Arial Bold.ttf" if bold else "/System/Library/Fonts/Supplemental/Arial.ttf",
+                     "/Library/Fonts/Arial Unicode.ttf"):
+            try:
+                return ImageFont.truetype(path, size)
+            except OSError:
+                continue
+        return ImageFont.load_default()
+
+    photo = cfg.get("photo")
+    src = ROOT / "public" / (photo.lstrip("/") + "-700.webp") if photo else None
+    if src and src.exists():
+        p = Image.open(src).convert("RGBA")
+        h = 600
+        p = p.resize((round(p.width * h / p.height), h), Image.LANCZOS)
+        img.paste(p, (W - p.width - 70, H - h), p)
+    else:
+        d.text((W - 300, H / 2), cfg["first_name"][0] + cfg["last_name"][0], font=font(260, True), fill=(205, 207, 213), anchor="mm")
+
+    chip = f'{cfg["title"]} · {cfg["city"]}'
+    d.rounded_rectangle((70, 70, 70 + 44 + d.textlength(chip, font=font(22)), 70 + 44), 22, fill=(255, 255, 255))
+    d.text((92, 92), chip, font=font(22), fill=(69, 70, 76), anchor="lm")
+    d.text((70, 170), name, font=font(68, True), fill=(18, 18, 20))
+    y = 270
+    words, line = practice_line.capitalize().split(), ""
+    for w in words:  # перенос рядка в межах 640px
+        test = (line + " " + w).strip()
+        if d.textlength(test, font=font(44)) > 640:
+            d.text((70, y), line, font=font(44), fill=(154, 155, 161)); y += 56; line = w
+        else:
+            line = test
+    d.text((70, y), line, font=font(44), fill=(154, 155, 161))
+    d.text((70, H - 90), f'Консультація {cfg.get("price", "")}', font=font(26), fill=(69, 70, 76))
+
+    out = ROOT / "public" / rel.lstrip("/")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out, "JPEG", quality=86, optimize=True)
+    return rel
+
+
 def situations(practices):
     return [(p, s) for p in practices for s in p["situations"]]
 
@@ -89,7 +173,10 @@ def render_cards(items):
 
 
 def render_memos(cfg, items):
-    photo = e(cfg["photo"])
+    if cfg.get("photo"):
+        avatar = f'<span class="memo__avatar"><img src="{e(cfg["photo"])}-700.webp" width="700" height="1099" alt="" loading="lazy"></span>'
+    else:
+        avatar = f'<span class="memo__avatar memo__avatar--mono">{e(cfg["first_name"][0] + cfg["last_name"][0])}</span>'
     out = []
     for p, s in items:
         now = "".join(f"<li>{e(x)}</li>" for x in s["now"])
@@ -109,7 +196,7 @@ def render_memos(cfg, items):
     </div>
   </div>
   <div class="memo__foot">
-    <span class="memo__avatar"><img src="{photo}-700.webp" width="700" height="1099" alt="" loading="lazy"></span>
+    {avatar}
     <p class="memo__note">Це загальні кроки. Що робити саме у вашому випадку, скажу на консультації.</p>
     <a class="btn btn--dark memo__cta" href="#contact" data-situation="{e(s["title"])}">Записатись з цією ситуацією</a>
   </div>
@@ -189,7 +276,6 @@ def build(slug):
         "name": name,
         "url": url,
         "telephone": tel,
-        "image": BASE_URL + cfg["photo"] + "-1100.webp",
         "address": {
             "@type": "PostalAddress",
             "streetAddress": cfg.get("address", ""),
@@ -200,6 +286,11 @@ def build(slug):
         "knowsAbout": [p["label"] for p in practices],
     }
 
+    photo = cfg.get("photo")
+    if photo:
+        schema["image"] = BASE_URL + photo + "-1100.webp"
+    og_image = BASE_URL + make_og(slug, cfg, name, practice_line)
+
     ctx = {
         "style": e(cfg.get("style", "light")),
         "font": e(cfg.get("font", "mix")),
@@ -207,7 +298,7 @@ def build(slug):
         "page_title": e(f'{name} — {cfg["title"].lower()} {cfg["city_in"]} · {practice_line}'),
         "description": e(description),
         "url": e(url),
-        "og_image": e(BASE_URL + cfg["photo"] + "-1100.webp"),
+        "og_image": e(og_image),
         "schema": json.dumps(schema, ensure_ascii=False),
         "concept_note": e(cfg.get("concept_note", "")),
         "concept_hidden": "" if cfg.get("concept_note") else " hidden",
@@ -234,9 +325,12 @@ def build(slug):
         "council": field(cfg, "council"),
         "price": field(cfg, "price"),
         "duration": field(cfg, "duration"),
-        "photo": e(cfg["photo"]),
-        "photo_about": e(cfg.get("photo_about") or cfg["photo"]),  # друге фото для «Про мене», якщо є
-        "photo_alt": e(cfg["photo_alt"]),
+        "hero_visual": hero_visual(cfg, initials),
+        "about_visual": about_visual(cfg, initials),
+        "about_mod": "" if photo else " about__photo--mono",
+        "preload": (f'  <link rel="preload" as="image" href="{e(photo)}-1100.webp" imagesrcset="{e(photo)}-700.webp 700w, {e(photo)}-1100.webp 1100w" imagesizes="(min-width: 1024px) 470px, 92vw">\n' if photo else ""),
+        "favicon": favicon(initials),
+        "fonts_url": FONTS.get(cfg.get("font", "onest"), FONTS["onest"]),
         "ticker": render_ticker(items),
         "cards": render_cards(items),
         "memos": render_memos(cfg, items),

@@ -13,13 +13,16 @@
   <meta property="og:description" content="{{description}}">
   <meta property="og:url" content="{{url}}">
   <meta property="og:image" content="{{og_image}}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="{{favicon}}">
   <meta name="theme-color" content="#F2F2F3">
   <script>document.documentElement.classList.add('js')</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Onest:wght@400;500;600&display=swap">
-  <link rel="preload" as="image" href="{{photo}}-1100.webp" imagesrcset="{{photo}}-700.webp 700w, {{photo}}-1100.webp 1100w" imagesizes="(min-width: 1024px) 470px, 92vw">
-  <link rel="stylesheet" href="/css/style.css?v={{version}}">
+  <link rel="stylesheet" href="{{fonts_url}}">
+{{preload}}  <link rel="stylesheet" href="/css/style.css?v={{version}}">
   <script type="application/ld+json">{{schema}}</script>
 </head>
 <body>
@@ -66,9 +69,7 @@
             </dl>
           </div>
 
-          <div class="hero__person">
-            <img src="{{photo}}-1100.webp" srcset="{{photo}}-700.webp 700w, {{photo}}-1100.webp 1100w" sizes="(min-width: 1024px) 470px, 92vw" width="1100" height="1728" alt="{{photo_alt}}" fetchpriority="high">
-          </div>
+{{hero_visual}}
 
           <a class="glass" href="#contact">
             <span class="glass__text">
@@ -136,8 +137,8 @@
     <!-- 4. Про мене -->
     <section class="section" id="about" aria-labelledby="about-title">
       <div class="wrap about">
-        <div class="about__photo">
-          <img src="{{photo_about}}-1100.webp" srcset="{{photo_about}}-700.webp 700w, {{photo_about}}-1100.webp 1100w" sizes="(min-width: 1024px) 40vw, 92vw" width="1100" height="1728" alt="{{photo_alt}}" loading="lazy">
+        <div class="about__photo{{about_mod}}">
+          {{about_visual}}
           <p class="about__badge"><span>{{title}}</span><b>з {{since}} року</b></p>
         </div>
         <div class="about__body">
