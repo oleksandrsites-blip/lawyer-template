@@ -312,7 +312,7 @@ def build(slug):
         "city_in": e(cfg["city_in"]),
         "online_chip": "· офлайн і онлайн" if cfg.get("online") else "",
         "online_text": " або онлайн" if cfg.get("online") else "",
-        "practice_line": e(practice_line.capitalize()),
+        "practice_line": e(cfg.get("headline") or practice_line.capitalize()),
         "headline_soft": e(cfg.get("headline_soft", "від консультації до суду")),
         "hero_line": e(cfg["hero_line"]),
         "phone": field(cfg, "phone"),
