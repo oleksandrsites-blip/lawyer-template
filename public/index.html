@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Onest:wght@400;500;600&display=swap">
   <link rel="preload" as="image" href="/img/leads/demo/cut-1100.webp" imagesrcset="/img/leads/demo/cut-700.webp 700w, /img/leads/demo/cut-1100.webp 1100w" imagesizes="(min-width: 1024px) 470px, 92vw">
-  <link rel="stylesheet" href="/css/style.css?v=1795625499">
+  <link rel="stylesheet" href="/css/style.css?v=1795625628">
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Attorney", "name": "Олена Коваль", "url": "https://advokat-site.pages.dev/", "telephone": "+380000000000", "image": "https://advokat-site.pages.dev/img/leads/demo/cut-1100.webp", "address": {"@type": "PostalAddress", "streetAddress": "вул. Соборна, 00, офіс 0", "addressLocality": "Рівне", "addressCountry": "UA"}, "areaServed": "Рівне", "knowsAbout": ["військові справи", "сімейні справи"]}</script>
 </head>
 <body>
@@ -230,7 +230,71 @@
         </ul>
       </div>
     </section>
+    <!-- 6. Питання -->
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="wrap faq">
+        <div class="faq__head">
+          <h2 class="h2" id="faq-title"><span class="h2__main">Часті питання</span> <span class="h2__soft">перед першою зустріччю</span></h2>
+          <p class="section__lead">Не знайшли свого? Напишіть у <a class="link" href="https://t.me/username" target="_blank" rel="noopener">Telegram</a> — відповім.</p>
+        </div>
+        <div class="faq__list">
+<details class="qa"><summary>Скільки коштує консультація?<span class="qa__icon" aria-hidden="true"></span></summary><p>600 грн, 45 хв. Якщо після консультації ви вирішите продовжити, ціну подальшої роботи фіксуємо в договорі ще до її початку.</p></details>
+<details class="qa"><summary>Чи можна проконсультуватися онлайн?<span class="qa__icon" aria-hidden="true"></span></summary><p>Так, у Telegram, Viber чи за відеозв&#x27;язком. Документи надсилаєте заздалегідь фото або сканами.</p></details>
+<details class="qa"><summary>Що взяти на консультацію?<span class="qa__icon" aria-hidden="true"></span></summary><p>Усе, що стосується ситуації: повістки, рішення, договори, листування. Якщо не впевнені, що знадобиться, беріть усе — розберемося разом.</p></details>
+<details class="qa"><summary>Ви можете сказати, чим закінчиться справа?<span class="qa__icon" aria-hidden="true"></span></summary><p>Гарантувати результат не може жоден адвокат, і правила адвокатської етики цього не дозволяють. Я чесно скажу, які є варіанти, ризики і що від них залежить.</p></details>
+<details class="qa"><summary>Чи дізнається хтось про моє звернення?<span class="qa__icon" aria-hidden="true"></span></summary><p>Ні. Усе, що ви розповідаєте, — адвокатська таємниця. Це вимога закону.</p></details>
+<details class="qa"><summary>Ви працюєте лише у Рівному?<span class="qa__icon" aria-hidden="true"></span></summary><p>Офіс — у Рівному. Онлайн-консультації можливі з будь-якого міста.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Контакти -->
+    <section class="section section--last" id="contact" aria-labelledby="contact-title">
+      <div class="wrap">
+        <div class="contact">
+          <div class="contact__info">
+            <h2 class="h2" id="contact-title"><span class="h2__main">Розкажіть, що сталося</span> <span class="h2__soft">— передзвоню й домовимось про консультацію</span></h2>
+            <ul class="channels" role="list">
+              <li><a class="channel" href="tel:+380000000000"><span class="channel__k">Телефон</span><span class="channel__v"><span class="ph" title="Умовні дані — замінити">+380 00 000 00 00</span></span></a></li>
+              <li><a class="channel" href="https://t.me/username" target="_blank" rel="noopener"><span class="channel__k">Telegram</span><span class="channel__v">Написати</span></a></li>
+              <li><a class="channel" href="viber://chat?number=380000000000"><span class="channel__k">Viber</span><span class="channel__v">Написати</span></a></li>
+              <li><a class="channel" href="https://www.google.com/maps/search/?api=1&amp;query=%D0%B2%D1%83%D0%BB.%20%D0%A1%D0%BE%D0%B1%D0%BE%D1%80%D0%BD%D0%B0%2C%2000%2C%20%D0%BE%D1%84%D1%96%D1%81%200%2C%20%D0%A0%D1%96%D0%B2%D0%BD%D0%B5" target="_blank" rel="noopener"><span class="channel__k">Офіс · <span class="ph" title="Умовні дані — замінити">Пн–Пт, 9:00–18:00</span></span><span class="channel__v"><span class="ph" title="Умовні дані — замінити">вул. Соборна, 00, офіс 0</span>, Рівне</span></a></li>
+            </ul>
+          </div>
+
+          <form class="form" action="/api/lead" method="post" novalidate data-site="demo" data-lawyer="Олена Коваль">
+            <p class="form__title">Заявка на консультацію</p>
+            <p class="form__situation" hidden><span>Ситуація: <b></b></span><button type="button" aria-label="Прибрати ситуацію">×</button></p>
+            <label class="field">
+              <span class="field__label">Ваше ім'я</span>
+              <input name="name" type="text" autocomplete="name" required minlength="2" maxlength="60">
+              <span class="field__error" aria-live="polite"></span>
+            </label>
+            <label class="field">
+              <span class="field__label">Телефон</span>
+              <input name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="+380">
+              <span class="field__error" aria-live="polite"></span>
+            </label>
+            <label class="hp" aria-hidden="true">Компанія <input name="company" tabindex="-1" autocomplete="off"></label>
+            <button class="btn btn--dark form__submit" type="submit">Надіслати заявку</button>
+            <p class="form__note">Відповім особисто. Дані бачу лише я — це адвокатська таємниця.</p>
+            <p class="form__status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div>
+        <p class="footer__name">Олена Коваль</p>
+        <p>Адвокатка · свідоцтво <span class="ph" title="Умовні дані — замінити">№ 000 від 2016 р.</span> · Рада адвокатів Рівненської області</p>
+      </div>
+      <p class="footer__secret">Інформація на сайті не є юридичною консультацією. Усе, що ви повідомляєте адвокату, — адвокатська таємниця.</p>
+      <p class="footer__meta">© 2026 · Сайт: oleks_web</p>
+    </div>
+  </footer>
 
 <dialog class="memo" id="memo-povistka" aria-labelledby="memo-povistka-t">
   <form method="dialog"><button class="memo__close" aria-label="Закрити">×</button></form>
@@ -371,6 +435,6 @@
     <button type="button" data-font="mix">Мікс</button>
   </div>
 
-  <script src="/js/main.js?v=1795625499" defer></script>
+  <script src="/js/main.js?v=1795625628" defer></script>
 </body>
 </html>

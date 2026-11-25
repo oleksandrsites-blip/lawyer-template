@@ -166,7 +166,66 @@
         </ul>
       </div>
     </section>
+    <!-- 6. Питання -->
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="wrap faq">
+        <div class="faq__head">
+          <h2 class="h2" id="faq-title"><span class="h2__main">Часті питання</span> <span class="h2__soft">перед першою зустріччю</span></h2>
+          <p class="section__lead">Не знайшли свого? Напишіть у <a class="link" href="{{telegram_url}}" target="_blank" rel="noopener">Telegram</a> — відповім.</p>
+        </div>
+        <div class="faq__list">
+{{faq}}
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Контакти -->
+    <section class="section section--last" id="contact" aria-labelledby="contact-title">
+      <div class="wrap">
+        <div class="contact">
+          <div class="contact__info">
+            <h2 class="h2" id="contact-title"><span class="h2__main">Розкажіть, що сталося</span> <span class="h2__soft">— передзвоню й домовимось про консультацію</span></h2>
+            <ul class="channels" role="list">
+              <li><a class="channel" href="tel:{{tel}}"><span class="channel__k">Телефон</span><span class="channel__v">{{phone}}</span></a></li>
+              <li><a class="channel" href="{{telegram_url}}" target="_blank" rel="noopener"><span class="channel__k">Telegram</span><span class="channel__v">Написати</span></a></li>
+              <li{{viber_hidden}}><a class="channel" href="{{viber_url}}"><span class="channel__k">Viber</span><span class="channel__v">Написати</span></a></li>
+              <li><a class="channel" href="{{maps_url}}" target="_blank" rel="noopener"><span class="channel__k">Офіс · {{hours}}</span><span class="channel__v">{{address}}, {{city}}</span></a></li>
+            </ul>
+          </div>
+
+          <form class="form" action="/api/lead" method="post" novalidate data-site="{{slug}}" data-lawyer="{{name}}">
+            <p class="form__title">Заявка на консультацію</p>
+            <p class="form__situation" hidden><span>Ситуація: <b></b></span><button type="button" aria-label="Прибрати ситуацію">×</button></p>
+            <label class="field">
+              <span class="field__label">Ваше ім'я</span>
+              <input name="name" type="text" autocomplete="name" required minlength="2" maxlength="60">
+              <span class="field__error" aria-live="polite"></span>
+            </label>
+            <label class="field">
+              <span class="field__label">Телефон</span>
+              <input name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="+380">
+              <span class="field__error" aria-live="polite"></span>
+            </label>
+            <label class="hp" aria-hidden="true">Компанія <input name="company" tabindex="-1" autocomplete="off"></label>
+            <button class="btn btn--dark form__submit" type="submit">Надіслати заявку</button>
+            <p class="form__note">Відповім особисто. Дані бачу лише я — це адвокатська таємниця.</p>
+            <p class="form__status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div>
+        <p class="footer__name">{{name}}</p>
+        <p>{{title}} · свідоцтво {{certificate}} · {{council}}</p>
+      </div>
+      <p class="footer__secret">Інформація на сайті не є юридичною консультацією. Усе, що ви повідомляєте адвокату, — адвокатська таємниця.</p>
+      <p class="footer__meta">© {{year}} · Сайт: oleks_web</p>
+    </div>
+  </footer>
 
 {{memos}}
 

@@ -14,6 +14,7 @@ import re
 import sys
 import time
 from pathlib import Path
+from urllib.parse import quote
 
 ROOT = Path(__file__).parent
 BASE_URL = "https://advokat-site.pages.dev"  # TODO: замінити на справжній домен проєкту
@@ -141,6 +142,32 @@ def render_about(cfg):
     return paras
 
 
+def render_faq(cfg):
+    """Типові питання. Можна перевизначити списком "faq": [{"q": ..., "a": ...}] у config."""
+    price = cfg.get("price", "")
+    duration = cfg.get("duration", "")
+    online = cfg.get("online")
+    default = [
+        {"q": "Скільки коштує консультація?",
+         "a": f"{price}, {duration}. Якщо після консультації ви вирішите продовжити, ціну подальшої роботи фіксуємо в договорі ще до її початку."},
+        {"q": "Чи можна проконсультуватися онлайн?",
+         "a": "Так, у Telegram, Viber чи за відеозв'язком. Документи надсилаєте заздалегідь фото або сканами."} if online else None,
+        {"q": "Що взяти на консультацію?",
+         "a": "Усе, що стосується ситуації: повістки, рішення, договори, листування. Якщо не впевнені, що знадобиться, беріть усе — розберемося разом."},
+        {"q": "Ви можете сказати, чим закінчиться справа?",
+         "a": "Гарантувати результат не може жоден адвокат, і правила адвокатської етики цього не дозволяють. Я чесно скажу, які є варіанти, ризики і що від них залежить."},
+        {"q": "Чи дізнається хтось про моє звернення?",
+         "a": "Ні. Усе, що ви розповідаєте, — адвокатська таємниця. Це вимога закону."},
+        {"q": f"Ви працюєте лише {cfg['city_in']}?",
+         "a": f"Офіс — {cfg['city_in']}." + (" Онлайн-консультації можливі з будь-якого міста." if online else "")},
+    ]
+    items = [x for x in (cfg.get("faq") or default) if x]
+    return "\n".join(
+        f'<details class="qa"><summary>{e(x["q"])}<span class="qa__icon" aria-hidden="true"></span></summary><p>{e(x["a"])}</p></details>'
+        for x in items
+    )
+
+
 def build(slug):
     cfg = load_json(ROOT / "leads" / f"{slug}.json")
     practices = [load_json(ROOT / "practices" / f"{pid}.json") for pid in cfg["practices"]]
@@ -216,6 +243,13 @@ def build(slug):
         "about": render_about(cfg),
         "education": field(cfg, "education"),
         "prices": render_prices(cfg),
+        "faq": render_faq(cfg),
+        "hours": field(cfg, "hours"),
+        "maps_url": e(cfg.get("maps_url") or "https://www.google.com/maps/search/?api=1&query=" + quote(cfg.get("address", "") + ", " + cfg["city"])),
+        "slug": e(slug),
+        "viber_url": e("viber://chat?number=" + re.sub(r"\D", "", cfg.get("viber", ""))) if cfg.get("viber") else "",
+        "viber_hidden": "" if cfg.get("viber") else " hidden",
+        "year": time.strftime("%Y"),
         "version": VERSION,
     }
 

@@ -29,9 +29,23 @@
 | `since`, `certificate`, `council` | `2016`, `№ 123 від 2016 р.` | факти замість оцінок |
 | `price`, `duration` | `600 грн`, `45 хв` | цифри в першому екрані |
 | `photo`, `photo_alt` | `/img/leads/ivanenko/cut` | без `-700.webp` |
+| `photo_about` | `/img/leads/ivanenko/about` | друге фото для «Про мене» (необов'язково) |
+| `about`, `about_example` | список абзаців, `false` | історія; `true` — підпис «приклад тексту» |
+| `education` | `НУ «Острозька академія», право` | |
+| `prices` | `[{"name", "price", "note", "main"}]` | `main: true` — темна картка з кнопкою |
+| `hours` | `Пн–Пт, 9:00–18:00` | |
+| `maps_url` | посилання Google Maps | необов'язково: інакше пошук за адресою |
+| `faq` | `[{"q", "a"}]` | необов'язково: інакше стандартні 6 питань |
 | `placeholders` | `["phone", "since"]` | ці поля підкреслені пунктиром як умовні |
 
 ## Практики `practices/<id>.json`
 
 `adj` (військові) · `label` · `group` · `tag` · `situations[]`: `id`, `icon` (doc, clock, money, family, alimony, house), `q` (як каже клієнт), `title`, `short`, `now[]`, `bring[]`.
 Тексти вичитані за ст. 13: жодних обіцянок результату, лише загальні кроки. Нова практика — новий файл у тому самому форматі.
+
+## Заявки з форми
+
+Форма шле на `/api/lead` (`functions/api/lead.js`) → Telegram-бот. У Cloudflare Pages → Settings → Variables:
+- `TELEGRAM_BOT_TOKEN` — токен бота (Secret);
+- `TELEGRAM_CHAT_ID` — куди слати за замовчуванням (для прототипів — тобі: побачиш, що сайт уже приносить заявки);
+- `LEAD_CHATS` — JSON `{"ivanenko": "123456"}`, коли адвокат купив сайт і заявки мають іти йому.
