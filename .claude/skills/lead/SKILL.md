@@ -11,7 +11,7 @@ description: Зібрати прототип сайту під конкретн�
 Довідка по полях і командах: `docs/config.md`. Етика й заборони: `docs/brief.md` (розділ «Етика»). Більше нічого не перечитуй без потреби — економ токени.
 
 ## 1. Дані ліда
-- Таблиця: https://docs.google.com/spreadsheets/d/1wvX6RMZdEhkM9kJpMae5vRu83VxY9l7i2Vh800l_YBI/edit, аркуш «Адвокати». Прочитай рядок заголовків і потрібний рядок (Google Sheets connector).
+- Таблиця: https://docs.google.com/spreadsheets/d/1mJCWds_wbqy_hYF29HwYGmajBTHToPqUaN7TNlK2WZM/edit, аркуш «Адвокати». Прочитай рядок заголовків і потрібний рядок (Google Sheets connector).
 - Відкриті джерела, 2–4 запити, не більше:
   - посилання з таблиці (OLX-оголошення/профіль): практики, формулювання, ціна, фото;
   - **ЄРАУ** (erau.unba.org.ua, пошук за ПІБ): № свідоцтва, дата, рада адвокатів — це факти для блоку «Про мене»;

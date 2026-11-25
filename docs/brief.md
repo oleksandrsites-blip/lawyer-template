@@ -50,4 +50,4 @@ _Складено 25.11.2026 за підсумками сесії ресерчу
 
 ## Перші ліди
 Google-таблиця, аркуш «Адвокати» (17 адвокатів з OLX, статус «Новий»):
-https://docs.google.com/spreadsheets/d/1wvX6RMZdEhkM9kJpMae5vRu83VxY9l7i2Vh800l_YBI/edit
+https://docs.google.com/spreadsheets/d/1mJCWds_wbqy_hYF29HwYGmajBTHToPqUaN7TNlK2WZM/edit
