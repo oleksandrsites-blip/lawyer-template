@@ -44,37 +44,42 @@ def field(cfg, key):
     return value
 
 
-def render_situations(practices):
+def render_situations(cfg, practices):
+    """Список «Що у вас сталося?»: фраза клієнта → пам'ятка."""
+    name = e(f'{cfg["first_name"]} {cfg["last_name"]}')
+    photo = e(cfg["photo"])
     out = []
     for p in practices:
-        out.append(f'<p class="sits__group">{e(p["group"])}</p>')
         for s in p["situations"]:
-            sid = f'sit-{s["id"]}'
+            sid = f'memo-{s["id"]}'
             now = "".join(f"<li>{e(x)}</li>" for x in s["now"])
             bring = "".join(f"<li>{e(x)}</li>" for x in s["bring"])
-            out.append(f'''<div class="sit">
-  <button class="sit__btn" type="button" aria-expanded="false" aria-controls="{sid}">
-    <span class="sit__title">{e(s["title"])}</span>
-    <span class="sit__short">{e(s["short"])}</span>
-    <span class="sit__icon" aria-hidden="true"></span>
+            out.append(f'''<li class="q">
+  <button class="q__btn" type="button" aria-expanded="false" aria-controls="{sid}">
+    <span class="q__tag">{e(p["tag"])}</span>
+    <span class="q__text"><span class="mark">{e(s["q"])}</span></span>
+    <span class="q__arrow" aria-hidden="true"></span>
   </button>
-  <div class="memo" id="{sid}" role="region" aria-label="{e(s["title"])}">
+  <div class="memo" id="{sid}" role="region" aria-label="Пам'ятка: {e(s["title"])}">
     <p class="memo__kicker">Пам'ятка · {e(p["label"])}</p>
-    <h3 class="memo__title">{e(s["title"])}</h3>
+    <h2 class="memo__title">{e(s["title"])}</h2>
     <div class="memo__cols">
       <div>
-        <h4 class="memo__h">Що зробити зараз</h4>
+        <h3 class="memo__h">Що зробити зараз</h3>
         <ol class="memo__steps">{now}</ol>
       </div>
       <div>
-        <h4 class="memo__h">Що взяти на консультацію</h4>
+        <h3 class="memo__h">Що взяти на консультацію</h3>
         <ul class="memo__bring">{bring}</ul>
       </div>
     </div>
-    <p class="memo__note">Це загальні кроки. Що робити саме у вашій ситуації, скажу на консультації.
-      <a class="memo__link" href="#contact" data-situation="{e(s["title"])}">Обговорити мою ситуацію <span aria-hidden="true">→</span></a></p>
+    <div class="memo__foot">
+      <img class="memo__avatar" src="{photo}-720.webp" width="720" height="1080" alt="" loading="lazy">
+      <p class="memo__note">Це загальні кроки. Що робити саме у вашому випадку, скажу на консультації.</p>
+      <a class="btn memo__cta" href="#contact" data-situation="{e(s["title"])}">Записатись з цією ситуацією</a>
+    </div>
   </div>
-</div>''')
+</li>''')
     return "\n".join(out)
 
 
@@ -138,7 +143,7 @@ def build(slug):
         "consult_price": field(cfg, "consult_price"),
         "photo": e(cfg["photo"]),
         "photo_alt": e(cfg["photo_alt"]),
-        "situations": render_situations(practices),
+        "situations": render_situations(cfg, practices),
         "version": TEMPLATE_VERSION,
     }
 
