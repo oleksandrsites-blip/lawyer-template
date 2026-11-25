@@ -3,8 +3,7 @@
   "configurations": [
     {
       "name": "lawyer-template",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8080", "--directory", "public"],
+      "url": "http://localhost:8080",
       "port": 8080
     }
   ]

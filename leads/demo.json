@@ -1,0 +1,29 @@
+{
+  "slug": "demo",
+  "style": "editorial",
+  "concept_note": "Демо-шаблон · ім'я та дані умовні",
+  "noindex": true,
+
+  "first_name": "Олена",
+  "last_name": "Коваль",
+  "title": "Адвокатка",
+  "city": "Рівне",
+  "city_in": "у Рівному",
+  "practices": ["military", "family"],
+  "hero_line": "Спершу розбираюсь у вашій ситуації й чесно кажу, що можна зробити. Далі — план дій і зрозуміла ціна.",
+
+  "phone": "+380 00 000 00 00",
+  "telegram": "username",
+  "viber": "+380000000000",
+  "address": "вул. Соборна, 00, офіс 0",
+
+  "since": 2016,
+  "certificate": "№ 000 від 2016 р.",
+  "council": "Рада адвокатів Рівненської області",
+  "consult_price": "від 600 грн",
+
+  "photo": "/img/portrait",
+  "photo_alt": "Олена Коваль, адвокатка",
+
+  "placeholders": ["phone", "address", "since", "certificate", "consult_price"]
+}
