@@ -17,7 +17,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 ROOT = Path(__file__).parent
-BASE_URL = "https://advokat-site.pages.dev"  # TODO: замінити на справжній домен проєкту
+BASE_URL = "https://advokat-site.pages.dev"  # проєкт Cloudflare Pages (з репозиторію lawyer-template)
 VERSION = str(int(time.time()))  # скидає кеш CSS/JS після кожної збірки
 
 # Іконки ситуацій (stroke, 24×24). Ключ — поле "icon" у practices/*.json

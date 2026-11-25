@@ -2,6 +2,14 @@
 (() => {
   'use strict';
 
+  /* ---------- Закріплене меню: скляний фон, щойно сторінка почала скролитись ---------- */
+  const topbar = document.querySelector('.topbar');
+  if (topbar) {
+    const onScroll = () => topbar.classList.toggle('is-scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
   /* ---------- Пам'ятки: картка ситуації або пункт бігучого рядка → dialog ---------- */
   const canDialog = typeof HTMLDialogElement === 'function';
 
