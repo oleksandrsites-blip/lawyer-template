@@ -264,7 +264,7 @@ def build(slug):
     name = f'{cfg["first_name"]} {cfg["last_name"]}'
     initials = cfg["first_name"][0] + cfg["last_name"][0]
     if all(p.get("adj") for p in practices):  # «військові та сімейні справи»
-        practice_line = join_uk(p["adj"] for p in practices) + " справи"
+        practice_line = join_uk(list(dict.fromkeys(p["adj"] for p in practices))) + " справи"  # без повторів: mobilization і military — обидва «військові»
     else:
         practice_line = join_uk(p["label"] for p in practices)
     tel = "+" + re.sub(r"\D", "", cfg.get("phone", ""))
